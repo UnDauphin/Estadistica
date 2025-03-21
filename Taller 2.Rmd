@@ -1,0 +1,353 @@
+---
+title: "Taller 2"
+author: "Grupo 4"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+Integrantes: Alejandro Moya, David Ibañez, David Reyes, Maria Clara Avila, Mateo Giraldo
+
+# Ejercicio 1: Consumo de Gasolina en Autos
+
+## Enunciado
+
+Una muestra aleatoria de seis autos de un determinado modelo evidencia que cada uno de ellos consume las siguientes cantidades (en km por litro):
+
+$$
+18.6, 18.4, 19.4, 20.4, 19.4, 20.5.
+$$
+
+Determine la probabilidad de que el consumo de gasolina medio muestral sea menor que 17.6 km por litro, suponiendo que la distribución de la población es normal con media $\mu = 17$ km/l.
+
+## Datos y Supuestos
+
+-   **Datos:** Muestra aleatoria de 6 autos con consumos registrados.
+-   **Unidad experimental:** Autos.
+-   **Población:** Consumo de gasolina por auto.
+-   **Estadístico:** Media muestral ($\overline{X}$).
+-   **Parámetro:** Media poblacional ($\mu$) = 17 km/l.
+-   **Supuesto:** Se asume que la distribución de la población es normal.
+
+## Fórmulas Utilizadas y Explicación
+
+La puntuación t se calcula como: $$
+t = \frac{\overline{X} - \mu}{s / \sqrt{n}}
+$$
+
+Esta fórmula permite estandarizar la diferencia entre la media muestral y la media poblacional en función del error estándar, lo que facilita la comparación con la distribución t de Student.
+
+La probabilidad se obtiene a partir de la distribución t: $$
+P(T \leq t)
+$$
+
+Esto nos dice qué tan probable es obtener un valor muestral inferior al especificado si la hipótesis poblacional es correcta.
+
+## Cálculos
+
+```{r consumo-datos}
+datos <- c(18.6, 18.4, 19.4, 20.4, 19.4, 20.5)
+n <- length(datos)
+media_muestral <- mean(datos)
+varianza_muestral <- var(datos)
+error_estandar <- sqrt(varianza_muestral / n)
+
+t_valor <- (17.6 - 17) / error_estandar
+probabilidad <- pt(t_valor, df = n-1)
+```
+
+-   **Media muestral:** `r round(media_muestral, 2)` km/l.
+-   **Varianza muestral:** `r round(varianza_muestral, 3)`.
+-   **Error estándar de la media:** `r round(error_estandar, 4)`.
+-   **Puntuación t:** `r round(t_valor, 3)`.
+-   **Probabilidad:** `r round(probabilidad * 100, 2)`%.
+
+### Gráfico Ilustrativo
+
+```{r consumo-grafico, echo=FALSE}
+library(ggplot2)
+library(ggtext)
+x_vals <- seq(-4, 4, length.out = 100)
+y_vals <- dt(x_vals, df = n-1)
+data_plot <- data.frame(x_vals, y_vals)
+
+ggplot(data_plot, aes(x_vals, y_vals)) +
+  geom_line(color = "blue", size = 1) +
+  geom_area(data = subset(data_plot, x_vals < t_valor), aes(y = y_vals), fill = "blue", alpha = 0.3) +
+  labs(title = "Distribución t de Student", x = "t", y = "Densidad") +
+  theme_minimal()
+```
+
+## Conclusion
+
+La probabilidad de que el consumo de gasolina medio muestral sea menor que 17.6 km/l es aproximadamente **`r round(probabilidad * 100, 2)`%**. Esto indica qué tan probable es encontrar una muestra con un consumo medio tan bajo si la media poblacional realmente fuera 17 km/l.
+
+------------------------------------------------------------------------
+
+# Punto 2: Proporción de Personas Mayores de 40 Años
+
+## Enunciado
+
+Se desea estudiar una muestra de 20 personas para determinar la proporción de ellas que tiene más de 40 años. Sabiendo que la proporción en la población es del 40%, ¿cuál es la probabilidad de que la proporción en la muestra sea menor del 50%?
+
+## Datos y Supuestos
+
+-   **Tamaño de la muestra (**$n$): 20 personas.
+-   **Proporción poblacional (**$P$): 40% o 0.40.
+-   **Objetivo:** Determinar la probabilidad de que la proporción muestral ($p$) sea menor del 50% (0.50).
+
+## Fórmulas Utilizadas y Explicación
+
+El error estándar de la proporción se calcula como: $$
+\sigma_p = \sqrt{\frac{P(1-P)}{n}}
+$$
+
+Esta fórmula mide la variabilidad esperada de la proporción muestral con respecto a la población, considerando el tamaño muestral.
+
+La puntuación z se obtiene mediante: $$
+z = \frac{p - P}{\sigma_p}
+$$
+
+Este valor permite estandarizar la diferencia entre la proporción muestral y la poblacional, facilitando su comparación con la distribución normal.
+
+La probabilidad se obtiene de la distribución normal: $$
+P(Z \leq z)
+$$
+
+Este cálculo nos permite estimar la probabilidad de observar una proporción muestral menor al 50% si la verdadera proporción poblacional es 40%.
+
+## Cálculos
+
+```{r proporcion-datos}
+n_p <- 20
+P_pob <- 0.40
+sigma_p <- sqrt((P_pob * (1 - P_pob)) / n_p)
+z_valor <- (0.50 - P_pob) / sigma_p
+probabilidad_prop <- pnorm(z_valor)
+```
+
+-   **Error Estándar de la Proporción Muestral:** `r round(sigma_p, 4)`.
+-   **Puntuación** $z$: `r round(z_valor, 3)`.
+-   **Probabilidad:** `r round(probabilidad_prop * 100, 2)`%.
+
+### Gráfico Ilustrativo
+
+```{r proporcion-grafico, echo=FALSE}
+x_vals <- seq(-3, 3, length.out = 100)
+y_vals <- dnorm(x_vals)
+data_plot <- data.frame(x_vals, y_vals)
+
+ggplot(data_plot, aes(x_vals, y_vals)) +
+  geom_line(color = "red", size = 1) +
+  geom_area(data = subset(data_plot, x_vals < z_valor), aes(y = y_vals), fill = "red", alpha = 0.3) +
+  labs(title = "Distribución Normal Estándar", x = "z", y = "Densidad") +
+  theme_minimal()
+```
+
+## Conclusion
+
+La probabilidad de que la proporción en la muestra sea menor del 50% es aproximadamente **`r round(probabilidad_prop * 100, 2)`%**. Esto nos indica qué tan común sería obtener una proporción muestral de menos del 50% si la proporción real de la población fuera 40%.
+
+# Punto 3:Probabilidad de solicitudes a mujeres
+
+## Enunciado
+Una empresa ha recibido 120 solicitudes de trabajo por parte de estudiantes que acaban de terminar su carrera de administración de empresas. Considerando estas solicitudes como una muestra aleatoria de todos los licenciados, ¿cuál es la probabilidad de que entre un 35% y un 45% de las solicitudes correspondan a mujeres si se sabe que el 40% de los administradores de empresas recién graduados lo son?
+
+## Datos Conocidos
+
+-   Número total de solicitudes: **120**
+-   Proporción esperada de mujeres: **40% (0.4)**
+
+## Datos Desconocidos
+
+-   Probabilidad de que entre el **35% y el 45%** de las solicitudes sean de mujeres.
+
+## Supuestos
+
+-   Las solicitudes representan una muestra aleatoria de todos los licenciados.
+-   La cantidad de solicitudes de mujeres sigue una distribución binomial.
+-   Para aproximar la distribución binomial a una normal, se verifica que **np ≥ 5** y **n(1-p) ≥ 5**.
+
+## Cálculo de la Probabilidad
+
+```{r definicion-parametros}
+# Definimos los parámetros del problema
+n <- 120  # Número total de solicitudes
+p <- 0.4  # Proporción esperada de mujeres
+
+# Calculamos la media y la desviación estándar de la distribución normal aproximada
+mu <- n * p
+sigma <- sqrt(n * p * (1 - p))
+
+# Definimos los límites del intervalo
+lower_bound <- 0.35 * n  # 35% de 120
+upper_bound <- 0.45 * n  # 45% de 120
+```
+
+```{r calculo-probabilidad}
+# Calculamos la probabilidad usando la aproximación normal
+prob <- pnorm(upper_bound, mean = mu, sd = sigma) - pnorm(lower_bound, mean = mu, sd = sigma)
+
+# Mostramos el resultado
+prob
+```
+
+## Interpretación de Resultados
+
+La probabilidad de que entre el **35% y el 45%** de las solicitudes correspondan a mujeres es **`r round(prob, 4)`**.
+
+## Visualización de la Distribución
+
+```{r grafico-distribucion}
+# Graficamos la distribución normal con el área de interés
+x_vals <- seq(mu - 4 * sigma, mu + 4 * sigma, length = 1000)
+y_vals <- dnorm(x_vals, mean = mu, sd = sigma)
+
+data <- data.frame(x = x_vals, y = y_vals)
+
+ggplot(data, aes(x, y)) +
+  geom_line(color = "blue") +
+  geom_area(data = subset(data, x >= lower_bound & x <= upper_bound), aes(x, y), fill = "red", alpha = 0.5) +
+  geom_vline(xintercept = lower_bound, linetype = "dashed", color = "black") +
+  geom_vline(xintercept = upper_bound, linetype = "dashed", color = "black") +
+  labs(title = "Distribución Normal Aproximada",
+       subtitle = "Área sombreada representa la probabilidad calculada",
+       x = "Número de solicitudes de mujeres",
+       y = "Densidad") +
+  theme_minimal()
+```
+
+## Conclusión
+
+Se ha utilizado una distribución normal como aproximación para determinar la probabilidad de que entre el **35% y 45%** de las solicitudes correspondan a mujeres. El resultado obtenido es de **`r round(prob, 4)`**, lo que nos permite entender la variabilidad en la muestra de solicitudes.
+
+# Punto 4: Simulaciones Montecarlo
+
+Para el punto realizaremos simulaciones montecarlo de los callejones sin salida de la tabla de distribucion de la media muestral. Para ambos casos se asumira distribucion desconocida o no normal, y muestras pequeñas(menor a 30)
+
+Las muestras seran tomadas del dataset trabajado en clase
+```{r carga dataset}
+datos <- read.csv("D:/Cuarto semestre/dataset.csv", sep=";")
+```
+
+## Callejon sin salida, varianza conocida
+
+Ahora hacemos simulacion de montecarlo de la seccion de edades de nuestro dataset con una muestra baja(20) para luego analizar si su media muestral sigue alguna distribucion
+
+```{r libraries, echo = FALSE}
+library(nortest)
+library(rriskDistributions)
+library(tidyverse)
+```
+
+Calculamos nuestros estadisticos, ademas de definir el tamaño y numero de nuestras muestras
+
+```{r datos}
+mudata = mean(datos$age)
+sigmadata = sd(datos$age)
+
+n = 20    # tamaño de la muestra
+M = 1000     # muestreos o replicas
+```
+
+Ahora le damos una semilla al codigo para poder replicar los resultados
+
+```{r seed}
+set.seed(132)
+```
+
+De aqui procedemos a hacer la simulacion montecarlo
+
+```{r}
+z = rep(NA, M)
+
+for (i in 1:M){
+  x = sample(datos$age, n)
+  xbar = mean(x)
+  s = sd(x)
+  z[i] = (xbar - mudata)/(sigmadata/sqrt(n))
+}
+
+par(mfrow = c(1,2))
+
+hist(z, freq = FALSE)
+z1 = seq(min(z), max(z), by = 0.001)
+pz1 = dnorm(z1)
+points(z1, pz1, pch = ".", col = 2)
+
+qqnorm(z)
+qqline(z, col = "red")
+```
+
+Ahora hacemos inicialmente unas pruebas de normalidad con Kolmogrov
+
+```{r}
+ks.test(scale(z), "pnorm")
+```
+
+Como hay empates con kolmogrov probamos con lilliefors
+
+```{r}
+lillie.test(z)
+```
+
+Como podemos ver, no hay indicios de normalidad, entonces procedemos a usar la libreria de rriskDistributions para hallar su distribucion
+
+```{r}
+fit <- fit.cont(z)
+```
+
+En este caso, las distribuciones no rechazadas fueron: normal, Cauchy, logistica, uniforme y t-student
+
+## Callejon sin salida, varianza conocida
+
+Calculamos nuestros estadisticos, ademas de definir el tamaño y numero de nuestras muestras
+
+```{r datos2}
+mudata = mean(datos$age)
+
+n = 20    # tamaño de la muestra
+M = 1000     # muestreos o replicas
+```
+
+De aqui procedemos a hacer la simulacion montecarlo
+
+```{r}
+z = rep(NA, M)
+
+for (i in 1:M){
+  x = sample(datos$age, n)
+  xbar = mean(x)
+  s = sd(x)
+  z[i] = (xbar - mudata)/(s/sqrt(n))
+}
+
+par(mfrow = c(1,2))
+
+hist(z, freq = FALSE)
+z1 = seq(min(z), max(z), by = 0.001)
+pz1 = dnorm(z1)
+points(z1, pz1, pch = ".", col = 2)
+
+qqnorm(z)
+qqline(z, col = "red")
+```
+
+Ahora hacemos pruebas de normalidad
+
+```{r tests}
+ks.test(scale(z), "pnorm")
+lillie.test(z)
+```
+
+Como podemos ver, no hay indicios de normalidad, entonces procedemos a usar la libreria de rriskDistributions para hallar su distribucion
+
+```{r}
+fit <- fit.cont(z)
+```
+
+En este caso, las distribuciones no rechazadas fueron: normal, Cauchy, logistica, uniforme y t-student
+
