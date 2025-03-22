@@ -1,0 +1,366 @@
+---
+title: "Taller 2 EST MAT"
+author: "María Clara Avila"
+date: "2025-03-21"
+output: html_document
+---
+# Punto 1 
+
+## Para las bases proporcionada para este taller, tuvimos que unir la variable Age de ambas bases, y como primer punto a resolver tenemos que determinar la media, mediana, desviación estandar y varianza de dichos datos
+```{r setup, include=FALSE}
+library(tidyverse)
+library(nortest)
+library(fitdistrplus)
+library(rriskDistributions)
+library(Amelia)
+library(dplyr)
+library(ggplot2)
+test_titanic <- read.csv("C:/Users/María Clara/Downloads/test_titanic.csv")
+train_titanic <- read.csv("C:/Users/María Clara/Downloads/train_titanic.csv")
+
+```
+
+## Transformación de datos
+```{r}
+train_titanic %>%
+  dplyr::select(-Survived) -> new_df_train
+
+dataset <- merge(new_df_train, test_titanic, all = TRUE)
+
+dataset %>%
+  dplyr::select(Age, Sex) -> df
+```
+
+## Conteo de faltantes
+
+```{r}
+missmap(df)
+```
+
+## Al hacer la imputación con de los NA con la media, nos dimos cuenta que no dio normal al hacer los tests de qqnorm y lillie, por lo cual tuvimos que imputar los datos faltantes con la mediana.
+
+```{r}
+df_nuevo <- median(df$Age, na.rm = TRUE)  
+df$Age[is.na(df$Age)] <- df_nuevo
+write.csv(df, "df_nuevo1.csv", row.names = FALSE)
+head(df)
+qqnorm(df$Age)
+lillie.test((df$Age))
+```
+
+## Calculamos la Media
+
+```{r}
+mean(df$Age)
+```
+
+## Mediana
+
+```{r}
+median(df$Age)
+```
+
+## Desviación Estandar
+
+```{r}
+sd(df$Age)
+```
+
+## Varianza
+
+```{r}
+var(df$Age)
+```
+
+## También calculamos los cuartiles 
+
+```{r}
+quantile(df$Age, probs = c(0.25, 0.50, 0.75), na.rm = TRUE)
+summary(df$Age)
+```
+
+## El resumen de los cinco primeros números de la variable Age
+
+```{r}
+fivenum(df$Age)
+```
+
+## Histograma Age
+
+```{r}
+ggplot(df, aes(x = Age)) +
+  geom_histogram(binwidth = 5, fill = "lightblue", color = "black") +
+  labs(title = "Histograma de la variable Edad", x = "Edad", y = "Frecuencia")
+```
+
+## Caja y Bigote Age
+
+```{r}
+ggplot(df, aes(y = Age)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(title = "Diagrama de Caja y Bigotes de Edad", y = "Edad")
+```
+
+# Punto 2
+
+## Tomamos una configuración inicial
+
+```{r}
+set.seed(123)
+library(tidyverse)
+library(nortest)
+library(rriskDistributions)
+library(Amelia)
+library(dplyr)
+
+test_titanic <- read.csv("C:/Users/María Clara/Downloads/test_titanic.csv")
+train_titanic <- read.csv("C:/Users/María Clara/Downloads/train_titanic.csv")
+
+```
+
+## Transformamos los datos
+
+```{r}
+train_titanic %>%
+  dplyr::select(-Survived) -> new_df_train
+
+dataset <- merge(new_df_train, test_titanic, all = TRUE)
+
+dataset %>%
+  dplyr::select(Age, Sex) -> df
+```
+
+## Contamos los dato faltantes
+
+```{r}
+missmap(df)
+```
+
+## Imputamos los datos faltantes con la mediana de Age
+
+```{r}
+df_nuevo <- median(df$Age, na.rm = TRUE)  
+df$Age[is.na(df$Age)] <- df_nuevo 
+write.csv(df, "df_nuevo.csv", row.names = FALSE)
+```
+
+## Hacemos un descriptivo
+
+```{r}
+head(df)
+median(df$Age, na.rm = TRUE)
+mean(df$Age)
+median(df$Age)
+```
+
+## Comprobamos normalidad
+
+```{r}
+lillie.test(df$Age)
+qqnorm(df$Age)
+var(df$Age)
+```
+
+## Primero, hacer un bucle para las 1000 muestras de la variable edad mayores a 30
+## Filtrar personas mayores de 30 años
+
+```{r}
+df_filtered <- df %>% filter(Age > 30)
+```
+
+## Parámetros para el bucle
+
+```{r}
+M <- 1000  # Número de muestras
+n_values <- c(50, 100, 200)  # Valores de n que vamos a probar
+```
+
+## Bucle para variar n
+
+```{r}
+for (n in n_values) {
+  # Inicializar el vector z para almacenar los estadísticos
+  z <- rep(NA, M)
+  
+  # Bucle para generar muestras y calcular estadísticos
+  for (i in 1:M) {
+    sample_ages <- sample(df_filtered$Age, n)
+    sample_mean <- mean(sample_ages)
+    sample_sd <- sd(sample_ages)
+    z[i] <- (sample_mean - mean(df_filtered$Age)) / (sample_sd / sqrt(n))
+  }
+  
+  # Prueba de normalidad
+  print(lillie.test(z))
+  
+  # Dibujar histograma y distribución normal estándar
+  hist(z, freq = FALSE, main = paste("Histograma de Z (n =", n, ")"), xlab = "Z")
+  curve(dnorm(x, mean = 0, sd = 1), add = TRUE, col = "blue")
+
+}
+```
+
+# Conclusiones
+
+## Como podemos ver si variamos el n con los valores de 50 100 y 200 notamos que con 50 no cumplen normalidad mientras que con 100 y 200 si
+
+# Punto 4 
+
+## Para este punto se dividieron en 4 incisos, en el primero se hace un bucle para generar 1000 muestras aleatorias de tamaño n = 50 de la variable "edad de mujeres" y 1000 muestras de tamaño n = 60 de la variable “edad de hombres”
+
+```{r}
+library(ggplot2)
+library(knitr)
+library(dplyr)
+library(gt)
+library(nortest)
+```
+
+# **Análisis de Diferencia de Proporciones**
+
+## Este análisis busca estudiar la diferencia de proporciones entre mujeres y hombres mayores de 30 años en el Titanic, mediante simulaciones y pruebas estadísticas.
+
+# **Carga y Combinación de Datos**
+
+## Se carga la información de los pasajeros desde los archivos de entrenamiento y prueba, combinando los datos y seleccionando solo las variables de interés: edad y género.
+
+```{r}
+# Cargar el paquete dplyr
+library(dplyr)
+
+# Cargar los datasets desde archivos CSV
+test_titanic <- read.csv("C:/Users/María Clara/Downloads/test_titanic.csv")
+train_titanic <- read.csv("C:/Users/María Clara/Downloads/train_titanic.csv")
+
+# Eliminar la columna 'Survived' del dataframe train_titanic
+new_df_train <- train_titanic %>% dplyr::select(-Survived)
+
+# Combinar los dataframes usando merge (full join)
+dataset <- merge(new_df_train, test_titanic, all = TRUE)
+
+# Seleccionar solo las columnas Age y Sex
+df <- dataset %>% dplyr::select(Age, Sex)
+
+# Verificar el resultado
+head(df)
+```
+
+## Unir los datos manteniendo solo Age y Sex
+
+```{r}
+datos_titanic <- train_titanic %>% dplyr::select(Age, Sex) %>%
+  bind_rows(test_titanic %>% dplyr::select(Age, Sex))
+```
+  
+# **Distribución de Edades Antes de la Imputación**
+
+## Se grafica la distribución de edades antes de imputar valores faltantes para entender la estructura de los datos.
+
+```{r}
+ggplot(datos_titanic, aes(x = Age, fill = Sex)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  ggtitle("Distribución de Edades Antes de la Imputación")
+```
+
+# **Prueba de Normalidad de Lilliefors**
+
+## Antes de imputar valores faltantes en la edad, verificamos si sigue una distribución normal mediante la prueba de Lilliefors.
+
+```{r}
+prueba_lillie <- lillie.test(na.omit(datos_titanic$Age))
+p_valor <- prueba_lillie$p.value
+es_normal <- p_valor > 0.05
+```
+
+# **Imputación de Datos Faltantes**
+
+## Dependiendo del resultado de la prueba de normalidad, se imputan los valores faltantes de la edad con la media o la mediana.
+
+```{r}
+if (es_normal) {
+  datos_titanic$Age[is.na(datos_titanic$Age)] <- mean(datos_titanic$Age, na.rm = TRUE)
+} else {
+  datos_titanic$Age[is.na(datos_titanic$Age)] <- median(datos_titanic$Age, na.rm = TRUE)
+}
+```
+
+# **Distribución de Edades Después de la Imputación**
+
+## Después de la imputación, se grafica nuevamente la distribución de edades para comparar con la original.
+
+```{r}
+ggplot(datos_titanic, aes(x = Age, fill = Sex)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  ggtitle("Distribución de Edades Después de la Imputación")
+```
+
+# **Generación de Muestras Aleatorias**
+
+## Se extraen 1000 muestras aleatorias de tamaño n=50 para mujeres y n=60 para hombres, calculando la proporción de individuos mayores de 30 años en cada muestra.
+
+```{r}
+set.seed(123)
+mujeres_muestras <- replicate(1000, mean(sample(datos_titanic$Age[datos_titanic$Sex == "female"], 50, replace = TRUE) > 30))
+hombres_muestras <- replicate(1000, mean(sample(datos_titanic$Age[datos_titanic$Sex == "male"], 60, replace = TRUE) > 30))
+
+dif_proporciones <- mujeres_muestras - hombres_muestras
+```
+
+# **Histogramas de la Diferencia de Proporciones**
+
+## El histograma muestra la distribución de la diferencia entre proporciones de mujeres y hombres mayores de 30 años en las muestras.
+
+```{r}
+ggplot(data.frame(dif_proporciones), aes(x = dif_proporciones)) +
+  geom_histogram(fill = "blue", color = "black", bins = 30) +
+  theme_minimal() +
+  ggtitle("Distribución de la Diferencia de Proporciones")
+```
+
+# **Boxplot de la Diferencia de Proporciones**
+
+## Se incluye un boxplot para visualizar la variabilidad y presencia de valores atípicos en la diferencia de proporciones.
+
+```{r}
+ggplot(data.frame(dif_proporciones), aes(y = dif_proporciones)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  theme_minimal() +
+  ggtitle("Boxplot de la Diferencia de Proporciones")
+```
+
+# **Gráfico Q-Q para la Diferencia de Proporciones**
+
+## El gráfico Q-Q permite comparar la distribución muestral con una distribución normal teórica, evaluando el cumplimiento del teorema de diferencia de proporciones.
+
+```{r}
+ggplot(data.frame(dif_proporciones), aes(sample = dif_proporciones)) +
+  stat_qq(color = "blue") + stat_qq_line(color = "red") +
+  theme_minimal() +
+  ggtitle("Gráfico Q-Q de la Diferencia de Proporciones")
+```
+
+# **Cálculo de Probabilidades Empíricas y Teóricas**
+
+## Se calcula la probabilidad empírica de que la diferencia de proporciones muestrales sea mayor a cero y se compara con la diferencia de proporciones poblacional.
+
+```{r}
+probabilidad_empirica <- mean(dif_proporciones > 0)
+
+prop_mujeres_30_total <- mean(datos_titanic$Age[datos_titanic$Sex == "female"] > 30, na.rm = TRUE)
+prop_hombres_30_total <- mean(datos_titanic$Age[datos_titanic$Sex == "male"] > 30, na.rm = TRUE)
+
+dif_proporciones_teorica <- prop_mujeres_30_total - prop_hombres_30_total
+
+resultados <- data.frame(
+  "Probabilidad Empírica" = probabilidad_empirica,
+  "Proporción Mujeres > 30 (Total)" = prop_mujeres_30_total,
+  "Proporción Hombres > 30 (Total)" = prop_hombres_30_total,
+  "Diferencia de Proporciones Teórica" = dif_proporciones_teorica
+)
+
+knitr::kable(resultados, caption = "Resultados de la Diferencia de Proporciones y Probabilidad Empírica")
+```
+
+## Este análisis proporciona una comparación clara entre las proporciones observadas y teóricas, permitiendo evaluar la diferencia de proporciones mediante métodos gráficos y probabilísticos.
