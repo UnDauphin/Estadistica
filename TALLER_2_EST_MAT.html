@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="María Clara Avila" />
+<meta name="author" content="María Clara Avila, Alejandro Moya, David Ibañez, David Reyes, Mateo Giraldo" />
 
 <meta name="date" content="2025-04-30" />
 
@@ -351,7 +351,8 @@ display: none;
 
 
 <h1 class="title toc-ignore">Taller 2 EST MAT</h1>
-<h4 class="author">María Clara Avila</h4>
+<h4 class="author">María Clara Avila, Alejandro Moya, David Ibañez,
+David Reyes, Mateo Giraldo</h4>
 <h4 class="date">2025-04-30</h4>
 
 </div>
@@ -359,224 +360,254 @@ display: none;
 
 <div id="punto-1" class="section level1">
 <h1>Punto 1</h1>
-<ol style="list-style-type: decimal">
-<li>Primero calculamos el momento poblacional. Como tenemos un solo
+<div id="estimador-metodo-de-momentos" class="section level2">
+<h2>Estimador metodo de momentos</h2>
+<p>Primero calculamos el momento poblacional. Como tenemos un solo
 parámetro a estimar usando el momento <span class="math inline">\(k =
-1\)</span>.</li>
-</ol>
+1\)</span>.</p>
 <p>Entonces</p>
 <p><span class="math display">\[m_1 = E(X)\]</span></p>
 <p>Para una distribución uniforme en el intervalo <span class="math inline">\([0, \theta]\)</span>, tenemos que</p>
 <p><span class="math display">\[E(X) = \frac{\theta}{2}\]</span></p>
 <p>Ahora calculamos el primer momento muestral</p>
-<pre><code>\[M_1 = \frac{1}{n} \sum_{i=1}^n X_i = \bar{X}\]
-
-Ahora igualamos ambos momentos
-
-\[m_1 = M_1\]
-\[\frac{\theta}{2} = \bar{X}\]
-
-De aquí despejamos $\theta$
-
-\[\hat{\theta}_1 = 2\bar{X}\]
-
-Ahora verificamos que nuestro estimador $\hat{\theta}_1$ es insesgado
-
-\[E(\hat{\theta}_1) = E(2\bar{X}) = 2E\left(\frac{1}{n} \sum_{i=1}^n X_i\right) = \frac{2}{n}E\left(\sum_{i=1}^n \frac{\theta}{2}\right) = \frac{1}{n}E(n\theta) =  E(\theta) = \theta\]
-
-Entonces el estimador $\hat{\theta}_1$ es insesgado
-
-\item La función de densidad de probabilidad de para $X \backsim \text{Uniforme}[0, \theta]$ se define como
-
-\[f_X(x) = \begin{cases}
-\dfrac{1}{\theta} &amp; \text{si } 0 \leq x \leq \theta, \\
-0 &amp; \text{en otro caso}.
-\end{cases}\]
-
-La función de verosimilitud la construimos como
-
-\[L(\theta) = f(x_1, \dots, x_n ; \theta) = \prod_{i=1}^n f_X(X_i)\]
-
-Note que si $\theta &lt; X_i$ para algún i, entonces $f_x(X_i) = 0$, por lo que
-
-\[L(\theta) = 0\]
-
-En el caso donde $\theta \geq X_i , \quad i = 1, \dots, n$, entonces 
-
-\[L(\theta) = \left(\frac{1}{\theta}\right)^n = \frac{1}{\theta^n}\]
-
-Entonces podemos expresar la función de verosimilitud como 
-
-\[L(\theta) = \begin{cases}
+<p><span class="math display">\[M_1 = \frac{1}{n} \sum_{i=1}^n X_i =
+\bar{X}\]</span></p>
+<p>Ahora igualamos ambos momentos</p>
+<p><span class="math display">\[m_1 = M_1\]</span> <span class="math display">\[\frac{\theta}{2} = \bar{X}\]</span></p>
+<p>De aquí despejamos <span class="math inline">\(\theta\)</span></p>
+<p><span class="math display">\[\hat{\theta}_1 = 2\bar{X}\]</span></p>
+<p>Ahora verificamos que nuestro estimador <span class="math inline">\(\hat{\theta}_1\)</span> es insesgado</p>
+<p><span class="math display">\[E(\hat{\theta}_1) = E(2\bar{X}) =
+2E\left(\frac{1}{n} \sum_{i=1}^n X_i\right) =
+\frac{2}{n}E\left(\sum_{i=1}^n \frac{\theta}{2}\right) =
+\frac{1}{n}E(n\theta) =  E(\theta) = \theta\]</span></p>
+<p>Entonces el estimador <span class="math inline">\(\hat{\theta}_1\)</span> es insesgado</p>
+</div>
+<div id="estimador-maxima-verosimilitud" class="section level2">
+<h2>Estimador maxima verosimilitud</h2>
+<p>La función de densidad de probabilidad de para <span class="math inline">\(X \backsim \text{Uniforme}[0, \theta]\)</span> se
+define como</p>
+<p><span class="math display">\[f_X(x) = \begin{cases}
+    \dfrac{1}{\theta} &amp; \text{si } 0 \leq x \leq \theta, \\
+    0 &amp; \text{en otro caso}.
+\end{cases}\]</span></p>
+<p>La función de verosimilitud la construimos como</p>
+<p><span class="math display">\[L(\theta) = f(x_1, \dots, x_n ; \theta)
+= \prod_{i=1}^n f_X(X_i)\]</span></p>
+<p>Note que si <span class="math inline">\(\theta &lt; X_i\)</span> para
+algún i, entonces <span class="math inline">\(f_x(X_i) = 0\)</span>, por
+lo que</p>
+<p><span class="math display">\[L(\theta) = 0\]</span></p>
+<p>En el caso donde <span class="math inline">\(\theta \geq X_i , \quad
+i = 1, \dots, n\)</span>, entonces</p>
+<p><span class="math display">\[L(\theta) =
+\left(\frac{1}{\theta}\right)^n = \frac{1}{\theta^n}\]</span></p>
+<p>Entonces podemos expresar la función de verosimilitud como</p>
+<p><span class="math display">\[L(\theta) = \begin{cases}
     \dfrac{1}{\theta^n} &amp; \theta \geq \text{max}(X_1, \dots, X_n) \\
     0 &amp; \text{en otro caso}
-\end{cases}\]
-
-Ahora como queremos maximizar la verosimilitud consideramos $\theta \geq \max(X_1, \dots, X_n)$ ya que $\theta &gt; 0$ por lo que $0 &lt; \dfrac{1}{\theta^n}$
-
-Por otro lado, note que
-
-\[\frac{d}{d\theta}\left(\frac{1}{\theta^n}\right) = -\frac{1}{\theta^{n+1}} &lt; 0\]
-
-Por lo que la función $L$ es decreciente, entonces para maximizar la función de verosimilitud, tendremos que escoger minimizar nuestro $\theta$, pero como ya definimos como cota inferior $\theta \geq \max(X_1, \dots, X_n)$ entonces maximizamos $L$ con $\theta = \max(X_1, \dots, X_n)$
-
-Entonces nuestro estimador de máxima verosimilitud es 
-
-\[\hat{\theta}_2 = \max(X_1, \dots, X_n)\]
-
-Para definir si es sesgado empezamos definiendo $Y = \max(X_1, \dots, X_n)$
-
-\[P[Y \leq y] = \left(\frac{y}{\theta^n}\right) \quad \text{para} \, 0 \leq y \leq \theta\] 
-
-\[f_Y(y) = \frac{d}{dy}P[Y \leq y] = \frac{ny^{n-1}}{\theta^n}\]
-
-\[E(\hat{\theta}_2) = \int_0^\theta y \cdot \frac{ny^{n-1}}{\theta^n} \,dy = \frac{n}{\theta^n} \int_0^\theta y^n \, dy = \frac{n}{\theta^n} \cdot \frac{\theta^{n+1}}{n+1} = \frac{n}{n+1}\theta\]
-
-Note que 
-
-\[\frac{n}{n+1}\theta \neq \theta\]
-
-Por lo que el estimador es sesgado
-
-\item Para una muestra $X_1, \dots, X_n \backsim \text{Uniforme}[0, \theta]$ la función de densidad del mínimo $m = \min(X_1, \dots, X_n)$ se calcula de la siguiente manera:  
-
-\begin{align*}
-F_m(x) &amp;= P(m \leq x) \\
-&amp;= 1 - P(m &gt; x) \\
-&amp;= 1 - P(\text{todos los } X_i &gt; x) \\
-&amp;= 1 - \prod_{i=1}^n P(X_i &gt; x) \\  
-&amp;= 1 - \left(1 - \frac{x}{\theta}\right)^n \quad \text{para } 0 \leq x \leq \theta
-\end{align*}
-Derivando la CDF obtenemos:
-\begin{align*}
-f_m(x) &amp;= \frac{d}{dx}F_m(x) \\
-&amp;= \frac{d}{dx}\left[1 - \left(1 - \frac{x}{\theta}\right)^n\right] \\
-&amp;= -n\left(1 - \frac{x}{\theta}\right)^{n-1} \cdot \left(-\frac{1}{\theta}\right) \\
-&amp;= \frac{n}{\theta}\left(1 - \frac{x}{\theta}\right)^{n-1} \quad \text{para } 0 \leq x \leq \theta
-\end{align*}
-
-Por lo tanto:
-
-\[f_m(x) = \frac{n}\theta \left(1 - \frac{x}\theta\right)^{n-1}, \quad 0 \leq x \leq \theta. \]
-
-Entonces podemos calcular la esperanza como
-
-\[E(m) = \int_0^\theta x \cdot \frac{n}\theta\left(1 - \frac{x}\theta\right)^{n-1} \, dx\]
-
-Para simplicar la solución de la integral hacemos la sustitución 
-\[y = 1 - \frac{x}\theta \quad \Rightarrow \quad x = \theta(1 - y) ,\quad dx = -\theta dy\]
-
-Evaluando en los limites de integración tenemos
-\begin{itemize}
-    \item Si $x = 0, y = 1 $
-    \item Si $x = 1, y = 0 $
-\end{itemize}
-
-Entonces la integral queda reescrita como
-
-\[E(m) = \int_1^0 \theta(1-y) \cdot \frac{n}\theta y^{n-1} \cdot (-\theta dy)\]
-
-Simplificando términos
-
-\[= n \theta \int_0^1 (1-y)y^{n-1} dy\]
-
-Ahora podemos distribuir el paréntesis y resolver las integrales
-
-\[ = n\theta \left(\int_0^1 y^{n-1} dy - \int_0^1 y^n dy\right) = n\theta \left( \frac{1}n - \frac{1}{n+1} \right)\]
-\[= n\theta \left(\frac{n+1-n}{n(n+1)}\right) = n\theta\left(\frac{1}{n(n+1)}\right) = \frac{\theta}{n+1}\]
-
-\[i.e. \quad E(m) = \frac{\theta}{n+1}\]
-
-Como queremos construir un estimador insesgado, para eliminar el sesgo despejamos $\theta$
-
-\[\theta = (n+1)E(m)\]
-
-Entonces nuestro estimador queda como
-
-\[\hat{\theta}_3 = (n+1)m\]
-
-Verificando que es insesgado calculamos
-
-\[E(\hat{\theta}_3) = E((n+1)m) = (n+1)E(m) = (n+1) \cdot \frac{\theta}{n+1} = \theta\]
-
-\item 
-\textbf{Varianza} $\mathbf{\hat{\theta}_1}$
-
-Note que como $X_i \backsim \text{Uniforme}[0, \theta]$
-
-\[\text{Var}(X_i) = \frac{(\theta - 0)^2}{12} = \frac{\theta^2}{12}\]
-
-Calculando la varianza del estimador
-
-\[\text{Var}(\hat{\theta}_1) = \text{Var}(2\bar{X}) = 4\text{Var}\left(\frac{\sum_{i=1}^n X_i}n \right)\]
-\[= \frac{4}{n^2} \sum_{i=1}^n \text{Var}(X_i) = \frac{4n}{n^2} \cdot \frac{\theta^2}{12} = \frac{\theta^2}{3n}\]
-
-\textbf{Varianza} $\mathbf{\hat{\theta}_2}$
-
-\[E(\hat{\theta}_2) = \frac{n}{n+1}\theta\]
-
-\[E(\hat{\theta}_2^2) = \int_0^\theta y^2 \cdot \frac{ny^{n-1}}{\theta^n} \,dy = \frac{n}{\theta^n} \int_0^\theta y^{n+1} \, dy = \frac{n}{\theta^n} \cdot \frac{\theta^{n+2}}{n+1} = \frac{n}{n+2}\theta^2\]
-
-\[\text{Var}(\hat{\theta}_2) = E(\hat{\theta}_2^2) - (E(\hat{\theta}_2))^2 = \frac{n}{n+2}\theta^2 - \left(\frac{n}{n+1}\theta\right)^2 = \frac{n\theta^2}{n+2} - \frac{n^2\theta^2}{(n+1)^2}\]
-\[= \frac{(n+1)^2n\theta^2 - (n+2)n^2\theta^2}{(n+1)^2(n+2)} = \frac{n\theta^2(n^2 +2n + 1 - n^2 - 2n)}{(n+1)^2(n+2)} = \frac{n\theta^2}{(n+1)^2(n+2)}\]
-
-\textbf{Varianza} $\mathbf{\hat\theta_3}$
-
-\[E(m) = \frac\theta{n+1}\]
-
-\[E(m^2) = \int_0^\theta x^2 \cdot \frac{n}\theta\left(1 - \frac{x}\theta\right)^{n-1} \, dx\]
-
-Hacemos la sustitución 
-\[y = 1 - \frac{x}\theta \quad \Rightarrow \quad x = \theta(1 - y) ,\quad dx = -\theta dy\]
-
-Evaluando en los limites de integración tenemos
-\begin{itemize}
-    \item Si $x = 0, y = 1 $
-    \item Si $x = 1, y = 0 $
-\end{itemize}
-
-Entonces la integral queda reescrita como
-
-\[E(m^2) = \int_1^0 \theta^2(1-y)^2 \cdot \frac{n}\theta y^{n-1} \cdot (-\theta dy)\]
-
-Simplificando términos
-
-\[= n \theta^2 \int_0^1 (1-y)^2y^{n-1} dy\]
-
-Ahora podemos distribuir el paréntesis y resolver las integrales
-
-\[ = n\theta \left(\int_0^1 y^{n-1} dy - 2\int_0^1 y^n dy + \int_0^1 y^{n+1} dy\right) = n\theta \left( \frac{1}n - \frac{2}{n+1} + \frac{1}{n+2}\right)\]
-\[= n\theta \left(\frac{(n+1)(n+2)-2n(n+2) + n(n+1)}{n(n+1)(n+2)}\right) = \theta\left(\frac{n^2+3n+2-2n^2-4n+n^2+n}{(n+1)(n+2)}\right)\]
-\[= \frac{2\theta^2}{(n+1)(n+2)}\]
-
-\[\text{Var}(m) = E(m^2) - [E(m)]^2 = \frac{2\theta^2}{(n+1)(n+2)} - \left(\frac\theta{n+1}\right)^2 = \frac{2\theta^2}{(n+1)(n+2)} - \frac{\theta^2}{(n+1)^2}\]
-\[= \frac{(n+1)2\theta^2 - (n+2)\theta^2}{(n+1)^2(n+2)} = \frac{\theta^2(2n+2-n-2)}{(n+1)^2(n+2)}= \frac{n\theta^2}{(n+1)^2(n+2)}\]
-
-\[\text{Var}(\hat\theta_3) = \text{Var}((n+1)m) = (n+1)^2\text{Var}(m) = (n+1)^2 \cdot \frac{n\theta^2}{(n+1)^2(n+2)} = \frac{n\theta^2}{n+2}\]</code></pre>
-\begin{center}
+\end{cases}\]</span></p>
+<p>Ahora como queremos maximizar la verosimilitud consideramos <span class="math inline">\(\theta \geq \max(X_1, \dots, X_n)\)</span> ya que
+<span class="math inline">\(\theta &gt; 0\)</span> por lo que <span class="math inline">\(0 &lt; \dfrac{1}{\theta^n}\)</span></p>
+<p>Por otro lado, note que</p>
+<p><span class="math display">\[\frac{d}{d\theta}\left(\frac{1}{\theta^n}\right)
+= -\frac{1}{\theta^{n+1}} &lt; 0\]</span></p>
+<p>Por lo que la función <span class="math inline">\(L\)</span> es
+decreciente, entonces para maximizar la función de verosimilitud,
+tendremos que escoger minimizar nuestro <span class="math inline">\(\theta\)</span>, pero como ya definimos como cota
+inferior <span class="math inline">\(\theta \geq \max(X_1, \dots,
+X_n)\)</span> entonces maximizamos <span class="math inline">\(L\)</span> con <span class="math inline">\(\theta
+= \max(X_1, \dots, X_n)\)</span></p>
+<p>Entonces nuestro estimador de máxima verosimilitud es</p>
+<p><span class="math display">\[\hat{\theta}_2 = \max(X_1, \dots,
+X_n)\]</span></p>
+<p>Para definir si es sesgado empezamos definiendo <span class="math inline">\(Y = \max(X_1, \dots, X_n)\)</span></p>
+<p><span class="math display">\[P[Y \leq y] =
+\left(\frac{y}{\theta}\right)^n \quad \text{para} \, 0 \leq y \leq
+\theta\]</span></p>
+<p><span class="math display">\[f_Y(y) = \frac{d}{dy}P[Y \leq y] =
+\frac{ny^{n-1}}{\theta^n}\]</span></p>
+<p><span class="math display">\[E(\hat{\theta}_2) = \int_0^\theta y
+\cdot \frac{ny^{n-1}}{\theta^n} \,dy = \frac{n}{\theta^n} \int_0^\theta
+y^n \, dy = \frac{n}{\theta^n} \cdot \frac{\theta^{n+1}}{n+1} =
+\frac{n}{n+1}\theta\]</span></p>
+<p>Note que</p>
+<p><span class="math display">\[\frac{n}{n+1}\theta \neq
+\theta\]</span></p>
+<p>Por lo que el estimador es sesgado</p>
+<p><span class="math display">\[
+\text{Sesgo}(\hat\theta_2) = E(\hat\theta_2) - \theta
+=  \frac{n}{n+1}\theta - \theta = \theta\left(\frac{n}{n+1}-1\right)
+\]</span></p>
+</div>
+<div id="estimador-por-esperanza-del-minimo" class="section level2">
+<h2>Estimador por esperanza del minimo</h2>
+<p>Para una muestra <span class="math inline">\(X_1, \dots, X_n \backsim
+\text{Uniforme}[0, \theta]\)</span> la función de densidad del mínimo
+<span class="math inline">\(m = \min(X_1, \dots, X_n)\)</span> se
+calcula de la siguiente manera:</p>
+<p><span class="math display">\[\begin{align*}
+    F_m(x) &amp;= P(m \leq x) \\
+    &amp;= 1 - P(m &gt; x) \\
+    &amp;= 1 - P(\text{todos los } X_i &gt; x) \\
+    &amp;= 1 - \prod_{i=1}^n P(X_i &gt; x) \\  
+    &amp;= 1 - \left(1 - \frac{x}{\theta}\right)^n \quad \text{para } 0
+\leq x \leq \theta
+\end{align*}\]</span> Derivando la CDF obtenemos: <span class="math display">\[\begin{align*}
+    f_m(x) &amp;= \frac{d}{dx}F_m(x) \\
+    &amp;= \frac{d}{dx}\left[1 - \left(1 -
+\frac{x}{\theta}\right)^n\right] \\
+    &amp;= -n\left(1 - \frac{x}{\theta}\right)^{n-1} \cdot
+\left(-\frac{1}{\theta}\right) \\
+    &amp;= \frac{n}{\theta}\left(1 - \frac{x}{\theta}\right)^{n-1} \quad
+\text{para } 0 \leq x \leq \theta
+\end{align*}\]</span></p>
+<p>Por lo tanto:</p>
+<p><span class="math display">\[f_m(x) = \frac{n}\theta \left(1 -
+\frac{x}\theta\right)^{n-1}, \quad 0 \leq x \leq \theta. \]</span></p>
+<p>Entonces podemos calcular la esperanza como</p>
+<p><span class="math display">\[E(m) = \int_0^\theta x \cdot
+\frac{n}\theta\left(1 - \frac{x}\theta\right)^{n-1} \, dx\]</span></p>
+<p>Para simplicar la solución de la integral hacemos la sustitución</p>
+<p><span class="math display">\[y = 1 - \frac{x}\theta \quad \Rightarrow
+\quad x = \theta(1 - y) ,\quad dx = -\theta dy\]</span></p>
+<p>Evaluando en los limites de integración tenemos</p>
+<ul>
+<li><p>Si <span class="math inline">\(x = 0, y = 1\)</span></p></li>
+<li><p>Si <span class="math inline">\(x = 1, y = 0\)</span></p></li>
+</ul>
+<p>Entonces la integral queda reescrita como</p>
+<p><span class="math display">\[E(m) = \int_1^0 \theta(1-y) \cdot
+\frac{n}\theta y^{n-1} \cdot (-\theta dy)\]</span></p>
+<p>Simplificando términos</p>
+<p><span class="math display">\[= n \theta \int_0^1 (1-y)y^{n-1}
+dy\]</span></p>
+<p>Ahora podemos distribuir el paréntesis y resolver las integrales</p>
+<p><span class="math display">\[ = n\theta \left(\int_0^1 y^{n-1} dy -
+\int_0^1 y^n dy\right) = n\theta \left( \frac{1}n - \frac{1}{n+1}
+\right)\]</span> <span class="math display">\[= n\theta
+\left(\frac{n+1-n}{n(n+1)}\right) = n\theta\left(\frac{1}{n(n+1)}\right)
+= \frac{\theta}{n+1}\]</span></p>
+<p><span class="math display">\[i.e. \quad E(m) =
+\frac{\theta}{n+1}\]</span></p>
+<p>Como queremos construir un estimador insesgado, para eliminar el
+sesgo despejamos <span class="math inline">\(\theta\)</span></p>
+<p><span class="math display">\[\theta = (n+1)E(m)\]</span></p>
+<p>Entonces nuestro estimador queda como</p>
+<p><span class="math display">\[\hat{\theta}_3 = (n+1)m\]</span></p>
+<p>Verificando que es insesgado calculamos</p>
+<p><span class="math display">\[E(\hat{\theta}_3) = E((n+1)m) =
+(n+1)E(m) = (n+1) \cdot \frac{\theta}{n+1} = \theta\]</span></p>
+</div>
+<div id="calculo-de-varianzas" class="section level2">
+<h2>Calculo de varianzas</h2>
+<p><strong>Varianza</strong> <span class="math inline">\(\mathbf{\hat{\theta}_1}\)</span></p>
+<p>Note que como <span class="math inline">\(X_i \backsim
+\text{Uniforme}[0, \theta]\)</span></p>
+<p><span class="math display">\[\text{Var}(X_i) = \frac{(\theta -
+0)^2}{12} = \frac{\theta^2}{12}\]</span></p>
+<p>Calculando la varianza del estimador</p>
+<p><span class="math display">\[\text{Var}(\hat{\theta}_1) =
+\text{Var}(2\bar{X}) = 4\text{Var}\left(\frac{\sum_{i=1}^n X_i}n
+\right)\]</span> <span class="math display">\[= \frac{4}{n^2}
+\sum_{i=1}^n \text{Var}(X_i) = \frac{4n}{n^2} \cdot \frac{\theta^2}{12}
+= \frac{\theta^2}{3n}\]</span></p>
+<p><strong>Varianza</strong> <span class="math inline">\(\mathbf{\hat{\theta}_2}\)</span></p>
+<p><span class="math display">\[E(\hat{\theta}_2) =
+\frac{n}{n+1}\theta\]</span></p>
+<p><span class="math display">\[E(\hat{\theta}_2^2) = \int_0^\theta y^2
+\cdot \frac{ny^{n-1}}{\theta^n} \,dy = \frac{n}{\theta^n} \int_0^\theta
+y^{n+1} \, dy = \frac{n}{\theta^n} \cdot \frac{\theta^{n+2}}{n+1} =
+\frac{n}{n+2}\theta^2\]</span></p>
+<p><span class="math display">\[\text{Var}(\hat{\theta}_2) =
+E(\hat{\theta}_2^2) - (E(\hat{\theta}_2))^2 = \frac{n}{n+2}\theta^2 -
+\left(\frac{n}{n+1}\theta\right)^2 = \frac{n\theta^2}{n+2} -
+\frac{n^2\theta^2}{(n+1)^2}\]</span> <span class="math display">\[=
+\frac{(n+1)^2n\theta^2 - (n+2)n^2\theta^2}{(n+1)^2(n+2)} =
+\frac{n\theta^2(n^2 +2n + 1 - n^2 - 2n)}{(n+1)^2(n+2)} =
+\frac{n\theta^2}{(n+1)^2(n+2)}\]</span></p>
+<p><strong>Varianza</strong> <span class="math inline">\(\mathbf{\hat\theta_3}\)</span></p>
+<p><span class="math display">\[E(m) = \frac\theta{n+1}\]</span></p>
+<p><span class="math display">\[E(m^2) = \int_0^\theta x^2 \cdot
+\frac{n}\theta\left(1 - \frac{x}\theta\right)^{n-1} \, dx\]</span></p>
+<p>Hacemos la sustitución <span class="math display">\[y = 1 -
+\frac{x}\theta \quad \Rightarrow \quad x = \theta(1 - y) ,\quad dx =
+-\theta dy\]</span></p>
+<p>Evaluando en los limites de integración tenemos</p>
+<ul>
+<li>Si <span class="math inline">\(x = 0, y = 1\)</span></li>
+<li>Si <span class="math inline">\(x = 1, y = 0\)</span></li>
+</ul>
+<p>Entonces la integral queda reescrita como</p>
+<p><span class="math display">\[E(m^2) = \int_1^0 \theta^2(1-y)^2 \cdot
+\frac{n}\theta y^{n-1} \cdot (-\theta dy)\]</span></p>
+<p>Simplificando términos</p>
+<p><span class="math display">\[= n \theta^2 \int_0^1 (1-y)^2y^{n-1}
+dy\]</span></p>
+<p>Ahora podemos distribuir el paréntesis y resolver las integrales</p>
+<p><span class="math display">\[ = n\theta \left(\int_0^1 y^{n-1} dy -
+2\int_0^1 y^n dy + \int_0^1 y^{n+1} dy\right) = n\theta \left( \frac{1}n
+- \frac{2}{n+1} + \frac{1}{n+2}\right)\]</span> <span class="math display">\[= n\theta \left(\frac{(n+1)(n+2)-2n(n+2) +
+n(n+1)}{n(n+1)(n+2)}\right) =
+\theta\left(\frac{n^2+3n+2-2n^2-4n+n^2+n}{(n+1)(n+2)}\right)\]</span>
+<span class="math display">\[= \frac{2\theta^2}{(n+1)(n+2)}\]</span></p>
+<p><span class="math display">\[\text{Var}(m) = E(m^2) - [E(m)]^2 =
+\frac{2\theta^2}{(n+1)(n+2)} - \left(\frac\theta{n+1}\right)^2 =
+\frac{2\theta^2}{(n+1)(n+2)} - \frac{\theta^2}{(n+1)^2}\]</span> <span class="math display">\[= \frac{(n+1)2\theta^2 -
+(n+2)\theta^2}{(n+1)^2(n+2)} = \frac{\theta^2(2n+2-n-2)}{(n+1)^2(n+2)}=
+\frac{n\theta^2}{(n+1)^2(n+2)}\]</span></p>
+<p><span class="math display">\[\text{Var}(\hat\theta_3) =
+\text{Var}((n+1)m) = (n+1)^2\text{Var}(m) = (n+1)^2 \cdot
+\frac{n\theta^2}{(n+1)^2(n+2)} = \frac{n\theta^2}{n+2}\]</span></p>
+</div>
+<div id="resumen" class="section level2">
+<h2>Resumen</h2>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="22%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Estimador</th>
+<th>Varianza</th>
+<th>Sesgo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\hat\theta_1\)</span></td>
+<td><span class="math inline">\(2\bar{X}\)</span></td>
+<td><span class="math inline">\(\frac{\theta^2}{3n}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat\theta_2\)</span></td>
+<td><span class="math inline">\(\max(X_1, \dots, X_n)\)</span></td>
+<td><span class="math inline">\(\frac{n\theta^2}{(n+1)^2(n+2)}\)</span></td>
+<td><span class="math inline">\(\theta\left(\frac{n}{n+1}-1\right)\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat\theta_3\)</span></td>
+<td><span class="math inline">\((n+1)m\)</span></td>
+<td><span class="math inline">\(\frac{n\theta^2}{n+2}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="punto-2" class="section level1">
 <h1>Punto 2</h1>
-<div id="aquí-creamos-el-bucle-que-genera-10.000-muestras-aleatorias-con-n-100-y-thetha-8.-de-adelanto-se-llaman-las-librerias-requeridas-para-este-desarrollo." class="section level2">
+<div id="aquí-creamos-el-bucle-que-genera-10.000-muestras-aleatorias-con-n-100-y-theta-8.-de-adelanto-se-llaman-las-librerias-requeridas-para-este-desarrollo." class="section level2">
 <h2>1. Aquí creamos el bucle que genera 10.000 muestras aleatorias con n
-= 100 y thetha = 8. De adelanto, se llaman las librerias requeridas para
+= 100 y theta = 8. De adelanto, se llaman las librerias requeridas para
 este desarrollo.</h2>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.4.2</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.4.2</code></pre>
-<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.4.2</code></pre>
-<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.4.2</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>library(ggplot2)
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
 n &lt;- 100         
 theta_real &lt;- 8   
 num_muestras &lt;- 10000 </code></pre>
@@ -671,11 +702,6 @@ ggplot(estimadores_long, aes(x = Estimador, y = Valor, fill = Estimador)) +
        y = &quot;Valor estimado&quot;) +
   scale_fill_manual(values = c(&quot;lightblue&quot;, &quot;lightgreen&quot;, &quot;lightcoral&quot;)) +
   theme_minimal()</code></pre>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
 <p><img src="data:image/png;base64,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" width="672" /></p>
 </div>
 <div id="mediante-este-análisis-sacamos-las-siguientes-conclusiones" class="section level2">
